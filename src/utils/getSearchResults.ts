@@ -4,11 +4,9 @@ import Toast from "./genToast";
 const APIProvider = {
   getSearchResults: async (searchBy: string, searchValue: string) => {
     try {
-      const URL = `http://localhost:3000/api/books?${searchBy}=${searchValue}`;
+      const URL = `/api/books?${searchBy}=${searchValue}`;
       console.log("URL", URL);
-      const res = await axios.get(
-        `http://localhost:3000/api/books?${searchBy}=${searchValue}`
-      );
+      const res = await axios.get(URL);
       console.log("res from axios", res);
       if (res.data.success === false) {
         console.error("Error in getSearchResults", res.data.message);

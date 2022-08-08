@@ -45,6 +45,7 @@ export default function Search({ books }: { books: Books[] }) {
       if (res.message) {
         switch (res.message) {
           case "Book does not exist":
+            setSearchResult(books);
             return genToast(
               "error",
               "ספר לא נמצא",
@@ -52,6 +53,7 @@ export default function Search({ books }: { books: Books[] }) {
             );
             break;
           case "Publisher does not exist":
+            setSearchResult(books);
             return genToast(
               "error",
               "הוצאה לא קיימת",
