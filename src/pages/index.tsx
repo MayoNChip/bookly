@@ -13,25 +13,9 @@ interface HomeProps {
   books: Books[];
 }
 
-// type books = {
-//   books: {
-//     id: number;
-//     bookName: string;
-//     bookCatagory: string;
-//     bookPublisher: String;
-//     bookShelf: string;
-//   };
-// }[];
-
 const index: NextPage<HomeProps> = (props) => {
   const { books } = props;
-  const [allBooks, setAllBooks] = useState(books);
 
-  const handleGetBooks = async () => {
-    const response = await axios.get("/api");
-    console.log("get books res ", response);
-    setAllBooks(response.data.data);
-  };
   console.log("props", props.books);
   return (
     <Flex
@@ -51,9 +35,7 @@ const index: NextPage<HomeProps> = (props) => {
         pb="15px"
         mb="15px"
       >
-        {/* <Search /> */}
-        <Button onClick={handleGetBooks}>get books</Button>
-        <Search books={allBooks} />
+        <Search books={books} />
       </Flex>
     </Flex>
   );
