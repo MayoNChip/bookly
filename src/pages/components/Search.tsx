@@ -18,6 +18,7 @@ import Toast from "../../utils/genToast";
 export default function Search({ books }: { books: Books[] }) {
   console.log("books from search componenet ", books);
   const [searchBy, setSearchBy] = useState("bookname");
+  const [isCatagory, setIsCatagory] = useState(false);
   const [searchResult, setSearchResult] = useState(books);
   const toast = useToast();
   const { genToast } = Toast();
@@ -26,9 +27,21 @@ export default function Search({ books }: { books: Books[] }) {
     initialValues: {
       searchBy: searchBy,
       searchValue: "",
+      catagory: "",
     },
     onSubmit: async (values) => {
-      console.log(values);
+      if (isCatagory === true) {
+        console.log("search by catagorty", values.catagory);
+        const res = await APIProvider.getSearchResults(
+          values.searchBy,
+          values.catagory
+        );
+        console.log("search be catagory res", res);
+        if (res.length === 0) {
+          genToast("error", "אירעה שגיאה", "נא לנסות שוב");
+        }
+        return setSearchResult(res);
+      }
       const res = await APIProvider.getSearchResults(
         values.searchBy,
         values.searchValue
@@ -66,6 +79,14 @@ export default function Search({ books }: { books: Books[] }) {
       setSearchResult(res);
     },
   });
+
+  const getCatagoryList = () => {
+    const catagoryList = books.map((book) => book.bookCatagory);
+    console.log("catagories", catagoryList);
+    const uniqueCatagoryList = [...new Set(catagoryList)];
+    console.log("catagories", uniqueCatagoryList);
+    return catagoryList;
+  };
 
   return (
     // <Flex>{props.books && props.books.map((book: Books) => book.id)}</Flex>
@@ -139,7 +160,15 @@ export default function Search({ books }: { books: Books[] }) {
                       defaultValue={searchBy}
                       borderRadius="0"
                       _focus={{ border: "none", outline: "none" }}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        if (e.target.value === "bookcatagory") {
+                          setIsCatagory(true);
+                        } else {
+                          setIsCatagory(false);
+                        }
+                        setSearchBy(formik.values.searchBy);
+                        formik.handleChange(e);
+                      }}
                     >
                       <option value="bookname">שם ספר</option>
                       <option value="bookpublisher">הוצאה</option>
@@ -148,14 +177,32 @@ export default function Search({ books }: { books: Books[] }) {
                   </FormControl>
 
                   <FormControl mt={["10px", "0px"]}>
-                    <Input
-                      name="searchValue"
-                      id="searchValue"
-                      borderRadius="0"
-                      onChange={formik.handleChange}
-                      _focus={{ border: "none", outline: "none" }}
-                      placeholder="חפש..."
-                    />
+                    {formik.values.searchBy === "bookcatagory" ? (
+                      <Select
+                        name="catagory"
+                        id="catagory"
+                        minW="120px"
+                        defaultValue={formik.values.catagory}
+                        borderRadius="0"
+                        _focus={{ border: "none", outline: "none" }}
+                        onChange={formik.handleChange}
+                      >
+                        {getCatagoryList().map((catagory, i) => (
+                          <option key={i} value={catagory}>
+                            {catagory}
+                          </option>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Input
+                        name="searchValue"
+                        id="searchValue"
+                        borderRadius="0"
+                        onChange={formik.handleChange}
+                        _focus={{ border: "none", outline: "none" }}
+                        placeholder="חפש..."
+                      />
+                    )}
                   </FormControl>
 
                   <Button
@@ -171,18 +218,10 @@ export default function Search({ books }: { books: Books[] }) {
             </form>
           </Flex>
         </Flex>
-        <Flex minH="200px" overflow="hidden" justifyContent="center">
+        <Flex overflow="hidden" justifyContent="center">
           <BooksTables books={searchResult || books} />
         </Flex>
       </FormikProvider>
     </>
   );
 }
-
-// export default function Search() {
-//   return (
-//     <Flex>
-//       <Heading>Search</Heading>
-//     </Flex>
-//   );
-// }

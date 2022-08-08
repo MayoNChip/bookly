@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  compilerOptions: {
+    downlevelIteration: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

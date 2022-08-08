@@ -41,15 +41,6 @@ const index: NextPage<HomeProps> = (props) => {
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const books = await prisma.books.findMany();
-//   return {
-//     props: {
-//       books,
-//     },
-//   };
-// };
-
 export const getServerSideProps: GetServerSideProps = async () => {
   const books = await prisma.books.findMany();
   return {

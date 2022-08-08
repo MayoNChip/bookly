@@ -10,7 +10,7 @@ export default function BooksTables({ books }: { books: Books[] }) {
           <Th>מספר מדף</Th>
           <Th>שם הספר</Th>
           <Th>קטגוריה</Th>
-          <Th>מוציא לאור</Th>
+          <Th>הוצאה לאור</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -18,10 +18,10 @@ export default function BooksTables({ books }: { books: Books[] }) {
           books.map((book) => {
             return (
               <Tr key={book.id}>
-                <Td>{book.bookShelf}</Td>
-                <Td>{book.bookName}</Td>
-                <Td>{book.bookCatagory}</Td>
-                <Td>{book.bookPublisher}</Td>
+                <Td w="10%">{book.bookShelf}</Td>
+                <Td w="40%">{book.bookName}</Td>
+                <Td w="30%">{book.bookCatagory}</Td>
+                <Td w="25%">{book.bookPublisher}</Td>
               </Tr>
             );
           })}
