@@ -6,22 +6,22 @@ import Search from "./components/Search";
 // import Navbar from "../components/Navbar";
 // import Search from "../components/Search";
 
-type props = {
+type books = {
   books: {
     id: number;
     bookName: string;
     bookCatagory: string;
     bookPublisher: String;
     bookShelf: string;
-  }[];
-};
+  };
+}[];
 
-const index: NextPage<props> = (props: props) => {
+const index: NextPage<books> = (books: books) => {
   const handleGetBooks = async () => {
     const response = await axios.get("http://localhost:3000/api");
     console.log("get books res ", response);
   };
-  console.log("props", props?.books);
+  console.log("props", books);
   return (
     <Flex
       direction="column"
@@ -40,21 +40,21 @@ const index: NextPage<props> = (props: props) => {
         pb="15px"
         mb="15px"
       >
-        <Search />
+        {/* <Search /> */}
         <Button onClick={handleGetBooks}>get books</Button>
-        {/* <Search books={props?.books} /> */}
+        <Search books={books?.books} />
       </Flex>
     </Flex>
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const res = await axios("http://localhost:3000/api/books/allbooks");
-//   return {
-//     props: {
-//       books: res?.data.data,
-//     },
-//   };
-// };
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios("http://localhost:3000/api/");
+  return {
+    props: {
+      books: res.data.data,
+    },
+  };
+};
 
 export default index;
