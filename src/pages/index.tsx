@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Navbar from "./components/Navbar";
@@ -17,6 +17,10 @@ type props = {
 };
 
 const index: NextPage<props> = (props: props) => {
+  const handleGetBooks = async () => {
+    const response = await axios.get("http://localhost:3000/api");
+    console.log("get books res ", response);
+  };
   console.log("props", props?.books);
   return (
     <Flex
@@ -37,6 +41,7 @@ const index: NextPage<props> = (props: props) => {
         mb="15px"
       >
         <Search />
+        <Button onClick={handleGetBooks}>get books</Button>
         {/* <Search books={props?.books} /> */}
       </Flex>
     </Flex>
