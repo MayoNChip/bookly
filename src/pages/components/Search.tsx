@@ -5,20 +5,22 @@ import {
   Heading,
   Input,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FormControl, FormLabel } from "@chakra-ui/react";
-// import BooksTables from "./BooksTables";
-// import APIProvider from "../../utils/getSearchResults";
+import APIProvider from "../../utils/getSearchResults";
 import { FormikProvider, useFormik } from "formik";
 import { Books } from "@prisma/client";
 import BooksTables from "./BooksTables";
+import Toast from "../../utils/genToast";
 
 export default function Search({ books }: { books: Books[] }) {
   console.log("books from search componenet ", books);
   const [searchBy, setSearchBy] = useState("bookname");
   const [searchResult, setSearchResult] = useState(books);
-  // const toast = useToast();
+  const toast = useToast();
+  const { genToast } = Toast();
 
   const formik = useFormik({
     initialValues: {
@@ -27,28 +29,39 @@ export default function Search({ books }: { books: Books[] }) {
     },
     onSubmit: async (values) => {
       console.log(values);
-      // const res = await APIProvider.getSearchResults(
-      //   values.searchBy,
-      //   values.searchValue
-      // );
-      // console.log("res from formik", res);
-      // if (res.success === false) {
-      //   console.log("we have an error");
-      //   console.log(res);
-      //   toast({
-      //     title: "שגיאה",
-      //     description: "נא להכניס ערך חיפוש",
-      //     status: "error",
-      //     duration: 5000,
-      //     containerStyle: {
-      //       display: "flex",
-      //       direction: "rtl",
-      //     },
-      //     isClosable: true,
-      //   });
-      //   return setSearchResult(books);
-      // }
-      // setSearchResult(res);
+      const res = await APIProvider.getSearchResults(
+        values.searchBy,
+        values.searchValue
+      );
+      console.log("res from formik", res);
+      if (res?.success === false) {
+        console.log("we have an error");
+        console.log(res);
+        genToast("error", "שגיאה", "נא להכניס ערך חיפוש");
+
+        return setSearchResult(books);
+      }
+      console.log("res message not found", res);
+      if (res.message) {
+        switch (res.message) {
+          case "Book does not exist":
+            return genToast(
+              "error",
+              "ספר לא נמצא",
+              "בדוק אם שם הספר כתוב נכון"
+            );
+            break;
+          case "Publisher does not exist":
+            return genToast(
+              "error",
+              "הוצאה לא קיימת",
+              "לא נמצא ספר עם ההוצאה הנבחרת"
+            );
+            break;
+        }
+        return setSearchResult(books);
+      }
+      setSearchResult(res);
     },
   });
 
