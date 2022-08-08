@@ -1,6 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react";
 import axios from "axios";
-import { NextPage, GetStaticProps } from "next";
+import { NextPage, GetStaticProps, GetServerSideProps } from "next";
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import { prisma } from "../../lib/prisma";
@@ -41,7 +41,16 @@ const index: NextPage<HomeProps> = (props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+// export const getStaticProps: GetStaticProps = async () => {
+//   const books = await prisma.books.findMany();
+//   return {
+//     props: {
+//       books,
+//     },
+//   };
+// };
+
+export const getServerSideProps: GetServerSideProps = async () => {
   const books = await prisma.books.findMany();
   return {
     props: {
