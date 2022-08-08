@@ -1,27 +1,33 @@
 import { Button, Flex } from "@chakra-ui/react";
 import axios from "axios";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
+import { prisma } from "../../lib/prisma";
+import { Books } from "@prisma/client";
 // import Navbar from "../components/Navbar";
 // import Search from "../components/Search";
 
-type books = {
-  books: {
-    id: number;
-    bookName: string;
-    bookCatagory: string;
-    bookPublisher: String;
-    bookShelf: string;
-  };
-}[];
+interface HomeProps {
+  books: Books[];
+}
 
-const index: NextPage<books> = (books: books) => {
+// type books = {
+//   books: {
+//     id: number;
+//     bookName: string;
+//     bookCatagory: string;
+//     bookPublisher: String;
+//     bookShelf: string;
+//   };
+// }[];
+
+const index: NextPage<HomeProps> = (props) => {
   const handleGetBooks = async () => {
     const response = await axios.get("http://localhost:3000/api");
     console.log("get books res ", response);
   };
-  console.log("props", books);
+  console.log("props", props.books);
   return (
     <Flex
       direction="column"
@@ -42,17 +48,17 @@ const index: NextPage<books> = (books: books) => {
       >
         {/* <Search /> */}
         <Button onClick={handleGetBooks}>get books</Button>
-        <Search books={books?.books} />
+        <Search books={props.books} />
       </Flex>
     </Flex>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await axios("http://localhost:3000/api/");
+export const getStaticProps: GetStaticProps = async () => {
+  const books = await prisma.books.findMany();
   return {
     props: {
-      books: res.data.data,
+      books,
     },
   };
 };

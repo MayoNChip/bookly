@@ -14,18 +14,10 @@
 // import { FormikProvider, useFormik } from "formik";
 
 import { Flex, Heading } from "@chakra-ui/react";
+import { Books } from "@prisma/client";
 
-type props = {
-  books: {
-    id: number;
-    bookName: string;
-    bookCatagory: string;
-    bookPublisher: String;
-    bookShelf: string;
-  }[];
-};
-
-export default function Search({ books }: props) {
+export default function Search(props: { books: Books[] }) {
+  console.log("books from search componenet ", props);
   //   const [searchBy, setSearchBy] = useState("bookname");
   //   const [searchResult, setSearchResult] = useState(books);
   //   const toast = useToast();
@@ -62,7 +54,7 @@ export default function Search({ books }: props) {
   //   });
 
   return (
-    <Flex>{books && books.map((book) => book.id)}</Flex>
+    <Flex>{props.books && props.books.map((book: Books) => book.id)}</Flex>
     //       <FormikProvider value={formik}>
     //         <Flex
     //           w="100%"
