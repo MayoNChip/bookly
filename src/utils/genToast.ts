@@ -12,8 +12,8 @@ export default function Toast() {
       description: message,
       status: type,
       duration: 9000,
+      position: "bottom",
       containerStyle: {
-        display: "flex",
         direction: "rtl",
       },
       isClosable: true,
