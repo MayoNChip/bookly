@@ -5,7 +5,7 @@ export default function BooksTables({ books }: { books: Books[] }) {
   console.log(books);
   return (
     <div>
-      <Table mt="20px" variant="striped" colorScheme="green">
+      <Table mt="20px" variant="striped" colorScheme="gray">
         <Thead>
           <Tr>
             <Th>מספר מדף</Th>
