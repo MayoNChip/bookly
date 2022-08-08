@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import { prisma } from "../../lib/prisma";
 import { Books } from "@prisma/client";
+import { useState } from "react";
 // import Navbar from "../components/Navbar";
 // import Search from "../components/Search";
 
@@ -23,9 +24,13 @@ interface HomeProps {
 // }[];
 
 const index: NextPage<HomeProps> = (props) => {
+  const { books } = props;
+  const [allBooks, setAllBooks] = useState(books);
+
   const handleGetBooks = async () => {
     const response = await axios.get("http://localhost:3000/api");
     console.log("get books res ", response);
+    setAllBooks(response.data.data);
   };
   console.log("props", props.books);
   return (
@@ -48,7 +53,7 @@ const index: NextPage<HomeProps> = (props) => {
       >
         {/* <Search /> */}
         <Button onClick={handleGetBooks}>get books</Button>
-        <Search books={props.books} />
+        <Search books={allBooks} />
       </Flex>
     </Flex>
   );
