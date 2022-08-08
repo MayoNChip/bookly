@@ -28,7 +28,7 @@ const index: NextPage<HomeProps> = (props) => {
   const [allBooks, setAllBooks] = useState(books);
 
   const handleGetBooks = async () => {
-    const response = await axios.get("http://localhost:3000/api");
+    const response = await axios.get("/api");
     console.log("get books res ", response);
     setAllBooks(response.data.data);
   };
