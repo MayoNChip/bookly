@@ -108,12 +108,13 @@ export default function Search({ books }: { books: Books[] }) {
 
             <form onSubmit={formik.handleSubmit}>
               <Flex w="100%" alignItems="center" justifyContent="center">
-                <Flex w="95%" alignItems="center">
+                <Flex w="95%" alignItems="center" direction={["column", "row"]}>
                   <FormControl
                     w="240px"
                     as={Flex}
                     flexDir="row"
                     alignItems="center"
+                    justifyContent="center"
                   >
                     <Flex
                       h="40px"
@@ -146,7 +147,7 @@ export default function Search({ books }: { books: Books[] }) {
                     </Select>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl mt={["10px", "0px"]}>
                     <Input
                       name="searchValue"
                       id="searchValue"
@@ -160,7 +161,8 @@ export default function Search({ books }: { books: Books[] }) {
                   <Button
                     type="submit"
                     colorScheme="gray"
-                    borderStartRadius={"none"}
+                    borderStartRadius={["md", "none"]}
+                    mt={["10px", "0px"]}
                   >
                     חפש
                   </Button>
@@ -169,7 +171,9 @@ export default function Search({ books }: { books: Books[] }) {
             </form>
           </Flex>
         </Flex>
-        <BooksTables books={searchResult || books} />
+        <Flex minH="200px" overflow="hidden" justifyContent="center">
+          <BooksTables books={searchResult || books} />
+        </Flex>
       </FormikProvider>
     </>
   );
